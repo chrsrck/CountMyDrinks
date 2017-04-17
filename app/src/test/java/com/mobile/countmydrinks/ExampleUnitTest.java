@@ -1,4 +1,4 @@
-package com.chrsrck.countmydrinks;
+package com.mobile.countmydrinks;
 
 import org.junit.Test;
 
