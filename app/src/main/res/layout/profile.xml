@@ -1,16 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="30sp"
-            android:text="Profile"/>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/profileTitle"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        android:text="Profile"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
-    </LinearLayout>
-</RelativeLayout>
+    <Spinner
+        android:id="@+id/gender_spinner"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/profileTitle"
+        app:layout_constraintBottom_toTopOf="@+id/weightTable"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+    <TableLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/weightTable"
+        app:layout_constraintTop_toBottomOf="@+id/gender_spinner"
+        app:layout_constraintBottom_toTopOf="@+id/baselineText"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+        <TableRow>
+            <TextView
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textSize="25sp"
+                android:text="Weight"/>
+            <EditText
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/weightEdit"
+                android:textSize="25sp"
+                android:inputType="number"
+                android:cursorVisible="false"
+                android:textAlignment="center"/>
+        </TableRow>
+    </TableLayout>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/baselineText"
+        android:textAlignment="center"
+        android:text="Baseline Reaction Time: Not Set"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@+id/weightTable"
+        app:layout_constraintBottom_toTopOf="@+id/updateButton"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <Button
+        android:layout_width="344dp"
+        android:layout_height="70dp"
+        android:id="@+id/updateButton"
+        android:text="Update Profile"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+</android.support.constraint.ConstraintLayout>

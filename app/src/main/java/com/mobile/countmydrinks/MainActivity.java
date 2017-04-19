@@ -1,11 +1,11 @@
 package com.mobile.countmydrinks;
 
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
+import android.support.v7.app.AlertDialog;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +17,9 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public final static String PROFILE_SETTING = "profile settings";
+    public final static String GENDER_SETTING = "gender settings";
+    public final static String WEIGHT_SETTING = "weight settings";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,29 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, new HomeFragment());
         ft.commit();
+
+        SharedPreferences settings = getSharedPreferences(PROFILE_SETTING, 0);
+
+        if (!settings.getBoolean("has_profile", false)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setCancelable(false);
+            builder.setTitle(R.string.alert_title);
+            builder.setMessage(R.string.alert_message);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            builder.show();
+            settings.edit().putBoolean("has_profile", false).apply();
+        }
     }
 
     @Override

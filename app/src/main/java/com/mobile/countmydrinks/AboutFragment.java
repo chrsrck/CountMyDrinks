@@ -7,10 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * Created by j.park on 4/16/2017.
- */
-
 public class AboutFragment extends Fragment {
 
     @Nullable
