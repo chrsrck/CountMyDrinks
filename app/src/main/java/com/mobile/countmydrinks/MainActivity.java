@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity
     public final static String PROFILE_SETTING = "profile settings";
     public final static String GENDER_SETTING = "gender settings";
     public final static String WEIGHT_SETTING = "weight settings";
+    public BACCalc bacCalc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        bacCalc = new BACCalc(this);
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
