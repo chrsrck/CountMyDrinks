@@ -15,4 +15,11 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+    
+    <string-array name="drink_type_array">
+        <item>Beer</item>
+        <item>Wine</item>
+        <item>Hard Liquor</item>
+    </string-array>
+
 </resources>
