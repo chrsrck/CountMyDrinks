@@ -82,6 +82,9 @@ public class ProfileFragment extends Fragment {
                     int weight = Integer.parseInt(weightText);
                     settings.edit().putInt(MainActivity.WEIGHT_SETTING, weight).apply();
                 }
+                else {
+                    settings.edit().putInt(MainActivity.WEIGHT_SETTING, -1).apply();
+                }
 
                 /* If the user has both updated their gender and weight then the data is saved */
                 if (!currGender.equals("Gender") && weightText.length() > 0) {
