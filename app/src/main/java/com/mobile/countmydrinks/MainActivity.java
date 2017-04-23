@@ -14,12 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public final static String PROFILE_SETTING = "profile settings";
     public final static String GENDER_SETTING = "gender settings";
     public final static String WEIGHT_SETTING = "weight settings";
+    public final static String DRINK_TYPE = "drink type";
     public BACCalc bacCalc;
 
     @Override
@@ -137,5 +139,21 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void addDrink(String drink) {
+        if(drink.equals("Beer"))
+        {
+
+        }
+        else if(drink.equals("Wine"))
+        {
+
+        }
+        else if(drink.equals("Hard Liquor"))
+        {
+
+        }
+
     }
 }
