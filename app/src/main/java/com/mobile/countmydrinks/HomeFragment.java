@@ -1,6 +1,7 @@
 package com.mobile.countmydrinks;
 
 import android.content.SharedPreferences;
+import android.icu.text.DecimalFormat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import java.util.Locale;
 
 public class HomeFragment extends Fragment {
     @Nullable
@@ -48,6 +52,12 @@ public class HomeFragment extends Fragment {
                 
             }
         });
+        TextView bacText = (TextView) view.findViewById(R.id.bac);
+        if(getArguments() != null) {
+            double bac = getArguments().getDouble(MainActivity.BAC);
+            String formatBac = String.format(Locale.US, "%.3f", bac);
+            bacText.setText(formatBac);
+        }
         return view;
     }
 }
