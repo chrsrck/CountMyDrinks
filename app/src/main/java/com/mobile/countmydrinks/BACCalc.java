@@ -1,7 +1,7 @@
 package com.mobile.countmydrinks;
 
 /**
- * This class updates the BAC every 6 minutes
+ * This class updates the BAC every hour
  *
  * Created by Hanson on 4/23/2017.
  * Updated by Justin Park on 4/24/2017.
@@ -59,8 +59,8 @@ public class BACCalc {
         }
 
         double totalWater = weight * genderCoeff * 1000;
-        double alcoholPerMl = 23.36 / totalWater;
-        double concentration = 100 * alcoholPerMl * .806; //.806 blood is composed of 80.6% of water
+        double alcoholPerML = 23.36 / totalWater;
+        double concentration = 100 * alcoholPerML * .806; //.806 blood is composed of 80.6% of water
         double consumed = ounces * alcoholContent;
         double finalBac = concentration * consumed;
 
