@@ -2,6 +2,7 @@ package com.mobile.countmydrinks;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -22,7 +23,9 @@ public class MainActivity extends AppCompatActivity
     public final static String GENDER_SETTING = "gender settings";
     public final static String WEIGHT_SETTING = "weight settings";
     public final static String DRINK_TYPE = "drink type";
+    public final static String BAC = "Bac";
     public BACCalc bacCalc;
+    public Bundle homeBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +34,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         bacCalc = new BACCalc(this);
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
+        homeBundle = new Bundle();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -119,6 +114,10 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.home_page) {
             fragment = new HomeFragment();
+
+            homeBundle.putDouble(BAC,bacCalc.getBac());
+            fragment.setArguments(homeBundle);
+
         }
         else if (id == R.id.nav_profile) {
             fragment = new ProfileFragment();
@@ -142,18 +141,33 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addDrink(String drink) {
-        if(drink.equals("Beer"))
-        {
+        bacCalc.addDrink(drink);
+
+    }
+    private class TimerAsyncTask extends AsyncTask<Double, Double, Void> {
+
+        @Override
+        protected Void doInBackground(Double... integers) {
+
+            while (true) {
+
+
+
+                try {
+                    Thread.sleep(360000);
+                } catch (Exception e) {
+                System.out.println(e);
+                }
+                bacCalc.updateBAC();
+                publishProgress(bacCalc.getBac());
+
+            }
+
 
         }
-        else if(drink.equals("Wine"))
-        {
-
+        @Override
+        protected void onProgressUpdate(Double... values) {
+            super.onProgressUpdate(values);
         }
-        else if(drink.equals("Hard Liquor"))
-        {
-
-        }
-
     }
 }

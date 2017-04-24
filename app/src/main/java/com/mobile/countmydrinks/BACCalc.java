@@ -13,7 +13,7 @@ public class BACCalc {
 
     MainActivity mainActivity;
     private SharedPreferences settings;
-    private int weight;
+    private double weight;
     private String gender;
     private double genderCoeff;
     private int numDrinks;
@@ -24,15 +24,15 @@ public class BACCalc {
     {
         this.mainActivity = mainActivity;
         settings = mainActivity.getSharedPreferences(MainActivity.PROFILE_SETTING, 0);
-        weight = settings.getInt(mainActivity.WEIGHT_SETTING, -1);
+        weight = ((double) settings.getInt(mainActivity.WEIGHT_SETTING, -1)) / 2.2046;
         gender = settings.getString(mainActivity.GENDER_SETTING,"Gender");
         if(gender.equals("Male"))
         {
-            genderCoeff = .68;
+            genderCoeff = .58;
         }
         else if(gender.equals("Female"))
         {
-            genderCoeff = .55;
+            genderCoeff = .49;
         }
         else
         {
@@ -42,9 +42,33 @@ public class BACCalc {
         numDrinks=0;
 
     }
-    public void addDrink(int alcohol)
+    public void addDrink(String type)
     {
-        bac = bac + ((alcohol)/(weight * genderCoeff)) * 100;
+        double ounces = 0;
+        double alcoholContent = 0;
+        if(type.equals("Beer"))
+        {
+            ounces = 12;
+            alcoholContent = .045;
+        }
+        else if(type.equals("Wine"))
+        {
+            ounces = 5;
+            alcoholContent = .125;
+        }
+        else if(type.equals("Hard Liquor"))
+        {
+            ounces = 1.5;
+            alcoholContent = .4;
+        }
+
+        double totalWater = weight * genderCoeff * 1000;
+        double alcoholPerMl = 23.36 / totalWater;
+        double concentration = 100 * alcoholPerMl * .806; //.806 blood is composed of 80.6% of water
+        double consumed = ounces * alcoholContent;
+        double finalBac = concentration * consumed;
+
+        bac = finalBac;
         numDrinks++;
     }
     public int getNumDrinks()
