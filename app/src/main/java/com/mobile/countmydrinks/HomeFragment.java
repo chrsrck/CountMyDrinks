@@ -1,7 +1,6 @@
 package com.mobile.countmydrinks;
 
 import android.content.SharedPreferences;
-import android.icu.text.DecimalFormat;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,11 +16,17 @@ import android.widget.TextView;
 import java.util.Locale;
 
 public class HomeFragment extends Fragment {
+    TextView bacText;
+    TextView totalText;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home, container, false);
+        bacText = (TextView) view.findViewById(R.id.bac);
+        totalText = (TextView) view.findViewById(R.id.total);
         final MainActivity mainActivity = (MainActivity) getActivity();
+
         Spinner typeSpinner = (Spinner) view.findViewById(R.id.typeSpinner);
         ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.drink_type_array, R.layout.basic_spinner_item);
@@ -46,18 +51,30 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 SharedPreferences settings = getActivity().getSharedPreferences(MainActivity.PROFILE_SETTING,0);
-                String drinkType = settings.getString(MainActivity.DRINK_TYPE,"Beer");
-
+                String drinkType = settings.getString(MainActivity.DRINK_TYPE, "Beer");
                 mainActivity.addDrink(drinkType);
-                
+                mainActivity.startBACCalc();
+                String formatBac = String.format(Locale.US, "%.3f", mainActivity.getBac());
+                formatBac += "%";
+                bacText.setText(formatBac);
+                totalText.setText(mainActivity.getNumDrinks() + " Total Drinks");
             }
         });
-        TextView bacText = (TextView) view.findViewById(R.id.bac);
+
         if(getArguments() != null) {
-            double bac = getArguments().getDouble(MainActivity.BAC);
+            double bac = getArguments().getDouble(MainActivity.CURRENT_BAC);
             String formatBac = String.format(Locale.US, "%.3f", bac);
+            formatBac += "%";
             bacText.setText(formatBac);
+
+            int numDrinks = getArguments().getInt(MainActivity.TOTAL_DRINKS);
+            totalText.setText(numDrinks + " Total Drinks");
         }
+
         return view;
+    }
+
+    public void setBacText(String txt) {
+        bacText.setText(txt);
     }
 }
