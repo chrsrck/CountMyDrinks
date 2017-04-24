@@ -18,6 +18,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+/**
+ * Created by Justin Park on 4/19/2017
+ */
 public class ProfileFragment extends Fragment {
     EditText weightEdit;
     Button updateButton;

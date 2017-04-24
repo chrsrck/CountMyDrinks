@@ -1,31 +1,26 @@
 package com.mobile.countmydrinks;
 
-import android.content.SharedPreferences;
-
-/**
- * Created by Hanson on 4/23/2017.
- */
-
 /**
  * This class updates the BAC every 6 minutes
+ *
+ * Created by Hanson on 4/23/2017.
+ * Updated by Justin Park on 4/24/2017.
  */
 public class BACCalc {
 
-    MainActivity mainActivity;
-    private SharedPreferences settings;
+    private final int DEFAULT_WEIGHT = 120;
     private double weight;
     private String gender;
     private double genderCoeff;
     private int numDrinks;
     private double bac;
-    boolean init = false;
 
-    public BACCalc(MainActivity mainActivity)
-    {
-        this.mainActivity = mainActivity;
-        settings = mainActivity.getSharedPreferences(MainActivity.PROFILE_SETTING, 0);
-        weight = ((double) settings.getInt(mainActivity.WEIGHT_SETTING, -1)) / 2.2046;
-        gender = settings.getString(mainActivity.GENDER_SETTING,"Gender");
+    public BACCalc(int weight, String gender) {
+        if (weight < 0) {
+            weight = DEFAULT_WEIGHT;
+        }
+        this.weight = ((double) weight) / 2.2046;
+        this.gender = gender;
         if(gender.equals("Male"))
         {
             genderCoeff = .58;
@@ -38,10 +33,11 @@ public class BACCalc {
         {
             genderCoeff = .615;
         }
+
         bac = 0.00;
         numDrinks=0;
-
     }
+
     public void addDrink(String type)
     {
         double ounces = 0;
@@ -68,25 +64,24 @@ public class BACCalc {
         double consumed = ounces * alcoholContent;
         double finalBac = concentration * consumed;
 
-        bac = finalBac;
+        bac += finalBac;
         numDrinks++;
     }
+
     public int getNumDrinks()
     {
         return numDrinks;
     }
 
-
-    public void updateBAC()
-    {
+    public void updateBAC() {
         bac = bac - .0015;
-
-
+        if (bac < 0) {
+            bac = 0;
+        }
     }
-    public  double getBac()
+
+    public double getBac()
     {
         return bac;
     }
-
-
 }

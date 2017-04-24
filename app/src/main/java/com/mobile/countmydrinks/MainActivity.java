@@ -15,17 +15,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    /* STRING KEYS FOR SHARED PREFERENCES */
     public final static String PROFILE_SETTING = "profile settings";
     public final static String GENDER_SETTING = "gender settings";
     public final static String WEIGHT_SETTING = "weight settings";
     public final static String DRINK_TYPE = "drink type";
-    public final static String BAC = "Bac";
-    public BACCalc bacCalc;
-    public Bundle homeBundle;
+
+    /* STRING KEYS FOR FRAGMENT TAGS */
+    public final static String HOME_TAG = "home tag";
+    public final static String PROFILE_TAG = "profile tag";
+    public final static String REACTION_TAG = "reaction tag";
+    public final static String ABOUT_TAG = "about tag";
+
+    /* STRING KEYS FOR HOME FRAGMENT */
+    public static final String CURRENT_BAC = "current bac";
+    public static final String TOTAL_DRINKS = "total drinks";
+
+    /* KEEPS TRACK OF CURRENT FRAGMENT TAG */
+    String currTag;
+
+    TimeAsyncTask timeAsyncTask;
+    BACCalc bacCalc;
+    boolean running;
+    Bundle homeBundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,8 +51,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        bacCalc = new BACCalc(this);
-        homeBundle = new Bundle();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -46,8 +63,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.getMenu().getItem(0).setChecked(true);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.content_frame, new HomeFragment());
+        ft.replace(R.id.content_frame, new HomeFragment(), HOME_TAG);
         ft.commit();
+        currTag = HOME_TAG;
 
         SharedPreferences settings = getSharedPreferences(PROFILE_SETTING, 0);
 
@@ -71,6 +89,13 @@ public class MainActivity extends AppCompatActivity
             builder.show();
             settings.edit().putBoolean("has_profile", false).apply();
         }
+
+        int weight = settings.getInt(MainActivity.WEIGHT_SETTING, -1);
+        String gender = settings.getString(MainActivity.GENDER_SETTING, "Gender");
+
+        bacCalc = new BACCalc(weight, gender);
+        running = false;
+        homeBundle = new Bundle();
     }
 
     @Override
@@ -111,28 +136,33 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Fragment fragment = null;
+        String fragTag = "";
 
         if (id == R.id.home_page) {
             fragment = new HomeFragment();
-
-            homeBundle.putDouble(BAC,bacCalc.getBac());
+            homeBundle.putDouble(CURRENT_BAC, this.getBac());
+            homeBundle.putInt(TOTAL_DRINKS, this.getNumDrinks());
             fragment.setArguments(homeBundle);
-
+            fragTag = HOME_TAG;
         }
         else if (id == R.id.nav_profile) {
             fragment = new ProfileFragment();
+            fragTag = PROFILE_TAG;
         }
         else if (id == R.id.nav_reaction) {
             fragment = new ReactionFragment();
+            fragTag = REACTION_TAG;
         }
         else if (id == R.id.nav_about) {
             fragment = new AboutFragment();
+            fragTag = ABOUT_TAG;
         }
 
-        if (fragment != null) {
+        if (!fragTag.equals(currTag) && fragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.content_frame, fragment);
+            ft.replace(R.id.content_frame, fragment, fragTag);
             ft.commit();
+            currTag = fragTag;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -140,34 +170,57 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void addDrink(String drink) {
-        bacCalc.addDrink(drink);
-
+    public void addDrink(String drinkType) {
+        bacCalc.addDrink(drinkType);
     }
-    private class TimerAsyncTask extends AsyncTask<Double, Double, Void> {
+
+    public double getBac() {
+        return bacCalc.getBac();
+    }
+
+    public int getNumDrinks() {
+        return bacCalc.getNumDrinks();
+    }
+
+    public void startBACCalc() {
+        if (!running) {
+            timeAsyncTask = new TimeAsyncTask();
+            timeAsyncTask.execute();
+            running = true;
+        }
+    }
+
+    private class TimeAsyncTask extends AsyncTask<Double, Double, Void> {
 
         @Override
         protected Void doInBackground(Double... integers) {
-
-            while (true) {
-
-
-
+            while (running) {
                 try {
-                    Thread.sleep(360000);
-                } catch (Exception e) {
-                System.out.println(e);
+                    Thread.sleep(3600000); // sleep for 1 hour
+                }
+                catch (Exception e) {
+                    System.out.println(e);
                 }
                 bacCalc.updateBAC();
                 publishProgress(bacCalc.getBac());
-
             }
-
-
+            return null;
         }
+
         @Override
         protected void onProgressUpdate(Double... values) {
             super.onProgressUpdate(values);
+            double val = values[0];
+            if (val < 0) {
+                val = 0;
+                running = false;
+            }
+            String formatBac = String.format(Locale.US, "%.3f", val);
+            formatBac += "%";
+            if (currTag.equals(HOME_TAG)) {
+                HomeFragment homeFrag = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HOME_TAG);
+                homeFrag.setBacText(formatBac);
+            }
         }
     }
 }
