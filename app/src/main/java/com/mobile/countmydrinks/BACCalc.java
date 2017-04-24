@@ -1,7 +1,7 @@
 package com.mobile.countmydrinks;
 
 /**
- * This class updates the BAC every hour
+ * This class updates the BAC every 6 minutes.
  *
  * Created by Hanson on 4/23/2017.
  * Updated by Justin Park on 4/24/2017.
