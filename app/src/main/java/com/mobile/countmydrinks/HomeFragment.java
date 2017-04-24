@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -58,6 +59,17 @@ public class HomeFragment extends Fragment {
                 formatBac += "%";
                 bacText.setText(formatBac);
                 totalText.setText(mainActivity.getNumDrinks() + " Total Drinks");
+                String addMsg = "";
+                if (drinkType.equals("Beer")) {
+                    addMsg = getString(R.string.added_beer);
+                }
+                else if (drinkType.equals("Wine")) {
+                    addMsg = getString(R.string.added_wine);
+                }
+                else if (drinkType.equals("Hard Liquor")) {
+                    addMsg = getString(R.string.added_shot);
+                }
+                Toast.makeText(getContext(), addMsg, Toast.LENGTH_LONG).show();
             }
         });
 

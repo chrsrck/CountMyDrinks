@@ -22,4 +22,7 @@
         <item>Hard Liquor</item>
     </string-array>
 
+    <string name="added_beer">You\'ve added a can of beer</string>
+    <string name="added_wine">You\'ve added a glass of wine</string>
+    <string name="added_shot">You\'ve added a shot of hard liquor</string>
 </resources>
