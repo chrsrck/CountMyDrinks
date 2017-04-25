@@ -9,8 +9,10 @@ package com.mobile.countmydrinks;
 public class BACCalc {
 
     private final int DEFAULT_WEIGHT = 120;
+    private final double GRAMS_PER_OZ_ALCOHOL = 23.36;
+    private final double BLOOD_WATER_PERCENT = 0.806;
+    private final double METABOLIZATION_RATE = 0.0015; // per 6 minutes
     private double weight;
-    private String gender;
     private double genderCoeff;
     private int numDrinks;
     private double bac;
@@ -20,7 +22,6 @@ public class BACCalc {
             weight = DEFAULT_WEIGHT;
         }
         this.weight = ((double) weight) / 2.2046;
-        this.gender = gender;
         if(gender.equals("Male"))
         {
             genderCoeff = .58;
@@ -31,10 +32,10 @@ public class BACCalc {
         }
         else
         {
-            genderCoeff = .615;
+            genderCoeff = .535;
         }
 
-        bac = 0.00;
+        bac = 0;
         numDrinks=0;
     }
 
@@ -59,8 +60,8 @@ public class BACCalc {
         }
 
         double totalWater = weight * genderCoeff * 1000;
-        double alcoholPerML = 23.36 / totalWater;
-        double concentration = 100 * alcoholPerML * .806; //.806 blood is composed of 80.6% of water
+        double alcoholPerML = GRAMS_PER_OZ_ALCOHOL / totalWater;
+        double concentration = 100 * alcoholPerML * BLOOD_WATER_PERCENT;
         double consumed = ounces * alcoholContent;
         double finalBac = concentration * consumed;
 
@@ -74,7 +75,7 @@ public class BACCalc {
     }
 
     public void updateBAC() {
-        bac = bac - .0015;
+        bac = bac - METABOLIZATION_RATE;
         if (bac < 0) {
             bac = 0;
         }
