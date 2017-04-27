@@ -85,4 +85,8 @@ public class BACCalc {
     {
         return bac;
     }
+
+    public void resetNumDrinks() {
+        numDrinks = 0;
+    }
 }

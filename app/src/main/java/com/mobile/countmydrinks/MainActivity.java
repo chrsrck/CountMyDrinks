@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -194,12 +195,38 @@ public class MainActivity extends AppCompatActivity
                         .setContentTitle("Count My Drinks")
                         .setContentText(contentText)
                         .setContentIntent(viewPendingIntent)
-                        .setVibrate(new long[] { 1000, 1000});;
+                        .setVibrate(new long[] {1000, 1000});;
 
         NotificationManagerCompat notificationManagerCompat =
                 NotificationManagerCompat.from(this);
 
         notificationManagerCompat.notify(notificationId, notificationBuilder.build());
+    }
+
+    public void promptEndSession() {
+        timeAsyncTask.cancel(true);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setCancelable(false);
+        builder.setTitle(R.string.end_title);
+        builder.setMessage(R.string.end_message);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                bacCalc.resetNumDrinks();
+                if (currTag.equals(HOME_TAG)) {
+                    HomeFragment homeFrag = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HOME_TAG);
+                    homeFrag.setTotalText(bacCalc.getNumDrinks());
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
     }
 
     private class TimeAsyncTask extends AsyncTask<Double, Double, Void> {
@@ -208,7 +235,7 @@ public class MainActivity extends AppCompatActivity
         protected Void doInBackground(Double... integers) {
             while (running) {
                 try {
-                    Thread.sleep(2000); // sleep for 6 minutes 360000
+                    Thread.sleep(360000); // sleep for 6 minutes
                 }
                 catch (Exception e) {
                     System.out.println(e);
@@ -227,7 +254,7 @@ public class MainActivity extends AppCompatActivity
                 val = 0;
                 running = false;
             }
-            if (val > 0.06 && !hasNotified) {
+            else if (val > 0.06 && !hasNotified) {
                 abovePositiveZone = true;
                 notifyUser(abovePositiveZone);
             }
@@ -243,7 +270,8 @@ public class MainActivity extends AppCompatActivity
                 homeFrag.setBacText(formatBac);
             }
             if (!running) {
-
+                promptEndSession();
+                Log.d("HELLO", "HELLO");
             }
         }
     }
