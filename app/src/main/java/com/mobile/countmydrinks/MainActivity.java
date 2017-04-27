@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -180,6 +181,15 @@ public class MainActivity extends AppCompatActivity
 
     public int getNumDrinks() {
         return bacCalc.getNumDrinks();
+    }
+
+    public void onTouchFired() {
+        Log.d("asdf", "asdf");
+        if (currTag.equals(REACTION_TAG)) {
+            ReactionFragment reactionFragment =
+                    (ReactionFragment) getSupportFragmentManager().findFragmentByTag(REACTION_TAG);
+            reactionFragment.onTouchFired();
+        }
     }
 
     public void startBACCalc() {
