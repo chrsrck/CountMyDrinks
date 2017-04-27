@@ -116,28 +116,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -230,7 +208,7 @@ public class MainActivity extends AppCompatActivity
         protected Void doInBackground(Double... integers) {
             while (running) {
                 try {
-                    Thread.sleep(360000); // sleep for 6 minutes
+                    Thread.sleep(2000); // sleep for 6 minutes 360000
                 }
                 catch (Exception e) {
                     System.out.println(e);
@@ -245,7 +223,7 @@ public class MainActivity extends AppCompatActivity
         protected void onProgressUpdate(Double... values) {
             super.onProgressUpdate(values);
             double val = values[0];
-            if (val < 0) {
+            if (val <= 0) {
                 val = 0;
                 running = false;
             }
@@ -253,7 +231,7 @@ public class MainActivity extends AppCompatActivity
                 abovePositiveZone = true;
                 notifyUser(abovePositiveZone);
             }
-            if (val <= 0.06 && abovePositiveZone) {
+            else if (val <= 0.06 && abovePositiveZone) {
                 abovePositiveZone = false;
                 notifyUser(abovePositiveZone);
                 hasNotified = false;
@@ -263,6 +241,9 @@ public class MainActivity extends AppCompatActivity
             if (currTag.equals(HOME_TAG)) {
                 HomeFragment homeFrag = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HOME_TAG);
                 homeFrag.setBacText(formatBac);
+            }
+            if (!running) {
+
             }
         }
     }
