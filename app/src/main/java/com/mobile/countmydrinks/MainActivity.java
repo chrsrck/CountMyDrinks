@@ -1,17 +1,21 @@
 package com.mobile.countmydrinks;
 
+import android.app.PendingIntent;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +48,8 @@ public class MainActivity extends AppCompatActivity
     BACCalc bacCalc;
     boolean running;
     Bundle homeBundle;
+    boolean abovePositiveZone;
+    boolean hasNotified;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +102,8 @@ public class MainActivity extends AppCompatActivity
         bacCalc = new BACCalc(weight, gender);
         running = false;
         homeBundle = new Bundle();
+        abovePositiveZone = false;
+        hasNotified = false;
     }
 
     @Override
@@ -190,6 +198,32 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void notifyUser(boolean above) {
+        String contentText;
+        if (above) {
+            contentText = "You're no longer in the positive drinking zone!";
+            hasNotified = true;
+        }
+        else {
+            contentText = "You're back in the positive drinking zone";
+        }
+        int notificationId = 1;
+        Intent viewIntent = new Intent(this, MainActivity.class);
+        PendingIntent viewPendingIntent = PendingIntent.getActivity(this, 0, viewIntent, 0);
+        NotificationCompat.Builder notificationBuilder =
+                (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Count My Drinks")
+                        .setContentText(contentText)
+                        .setContentIntent(viewPendingIntent)
+                        .setVibrate(new long[] { 1000, 1000});;
+
+        NotificationManagerCompat notificationManagerCompat =
+                NotificationManagerCompat.from(this);
+
+        notificationManagerCompat.notify(notificationId, notificationBuilder.build());
+    }
+
     private class TimeAsyncTask extends AsyncTask<Double, Double, Void> {
 
         @Override
@@ -214,6 +248,15 @@ public class MainActivity extends AppCompatActivity
             if (val < 0) {
                 val = 0;
                 running = false;
+            }
+            if (val > 0.06 && !hasNotified) {
+                abovePositiveZone = true;
+                notifyUser(abovePositiveZone);
+            }
+            if (val <= 0.06 && abovePositiveZone) {
+                abovePositiveZone = false;
+                notifyUser(abovePositiveZone);
+                hasNotified = false;
             }
             String formatBac = String.format(Locale.US, "%.3f", val);
             formatBac += "%";
