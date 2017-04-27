@@ -14,4 +14,6 @@ public class ReactionFragment extends Fragment {
         View view = inflater.inflate(R.layout.reaction, container, false);
         return view;
     }
+
+
 }
