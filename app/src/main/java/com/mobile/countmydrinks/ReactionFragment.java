@@ -3,12 +3,10 @@ package com.mobile.countmydrinks;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -19,6 +17,8 @@ public class ReactionFragment extends Fragment {
     private static int MILLISECS_IN_DECISECS = 100;
     private static int MILLISECS_IN_CENTISECS = 10;
 
+    private static int CENTISECONDS_IN_SECOND = 100;
+
     private TextView timeCountText;
     private TextView promptText;
     private TextView baselineText;
@@ -28,6 +28,9 @@ public class ReactionFragment extends Fragment {
     private int milliseconds;
     private GametimeAsyncTask gametimeAsyncTask;
     private StringBuilder mStringBuilder;
+
+    private long startTime;
+    private long timeElapsed;
 
 
     @Nullable
@@ -57,6 +60,9 @@ public class ReactionFragment extends Fragment {
         }
         // start game
         else {
+            startTime = 0;
+            timeElapsed = 0;
+            timeCountText.setText("00:000");
             promptText.setText(R.string.go_prompt);
             gameStarted = true;
             this.getView().setBackgroundColor(Color.GREEN);
@@ -66,24 +72,29 @@ public class ReactionFragment extends Fragment {
 
     }
 
-    private void setTimeTextValues(int passedTime) {
-        int seconds = passedTime / MILLISECS_IN_SECOND;
-        int millisecs = passedTime - (seconds * MILLISECS_IN_SECOND);
+    private void setTimeTextValues(long threadTime) {
+        long timeElapsed = threadTime - startTime;
+        long seconds = timeElapsed / MILLISECS_IN_SECOND;
+        long milliseconds = timeElapsed - (seconds * MILLISECS_IN_SECOND);
 
         if (seconds < 10) {
             mStringBuilder.append("0");
         }
 
-        mStringBuilder.append(Integer.toString(seconds) + ":");
+        mStringBuilder.append(Long.toString(seconds) + ":");
 
-        if (millisecs < 100) {
+        if (milliseconds < 100) {
             mStringBuilder.append("0");
         }
 
-        if (millisecs < 10) {
+        if (milliseconds < 10) {
             mStringBuilder.append("0");
         }
-        mStringBuilder.append(Integer.toString(millisecs));
+
+//        if (centisecs < 1) {
+//            mStringBuilder.append("0");
+//        }
+        mStringBuilder.append(Long.toString(milliseconds));
         timeCountText.setText(mStringBuilder.toString());
         mStringBuilder.setLength(0);
     }
@@ -105,7 +116,13 @@ public class ReactionFragment extends Fragment {
 
     }
 
-    private class GametimeAsyncTask extends AsyncTask<Void, Integer, Void> {
+    private class GametimeAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            startTime = System.currentTimeMillis();
+        }
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -113,12 +130,11 @@ public class ReactionFragment extends Fragment {
             while (gameStarted) {
                 try {
                     Thread.sleep(1);
-                    milliseconds++;
                 }
                 catch (Exception e) {
                     e.printStackTrace();
                 }
-                publishProgress(new Integer(milliseconds));
+                publishProgress();
 
                 if (isCancelled()) {
                     break;
@@ -128,9 +144,9 @@ public class ReactionFragment extends Fragment {
         }
 
         @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            setTimeTextValues(values[0].intValue());
+        protected void onProgressUpdate(Void... voids) {
+            super.onProgressUpdate();
+            setTimeTextValues(System.currentTimeMillis());
         }
     }
 
