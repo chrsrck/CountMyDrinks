@@ -28,5 +28,6 @@
     
     <string name="tap_prompt">Tap screen on color change.</string>
     <string name="go_prompt">Go!</string>
-    <string name="too_much_prmopt">You might have had a little too much to drink.</string>
+    <string name="too_much_prompt">You might have had a little too much to drink.</string>
+    <string name="play_again_prompt">Play again?</string>
 </resources>

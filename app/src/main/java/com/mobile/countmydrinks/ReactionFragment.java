@@ -1,5 +1,7 @@
 package com.mobile.countmydrinks;
 
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,13 +24,15 @@ public class ReactionFragment extends Fragment {
     private TextView baselineText;
 
 
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.reaction, container, false);
         final MainActivity mainActivity = (MainActivity) getActivity();
         timeCountText = (TextView) view.findViewById(R.id.timeCountText);
-        promptText = (TextView) view.findViewById(R.id.timeCountText);
+        promptText = (TextView) view.findViewById(R.id.promptText);
         baselineText = (TextView) view.findViewById(R.id.baselineText);
 
         touchCount = 0;
@@ -41,16 +45,19 @@ public class ReactionFragment extends Fragment {
 
     public void onTouchFired() {
 
-        promptText.setText("Tap gesture detected!");
-//        if (gameStarted && touchCount == 0) {
-//
-//        }
-//        else if (!gameStarted && touchCount == 1) {
-//
-//        }
-//        else if (gameStarted && touchCount == 2) {
-//
-//        }
+        // end game game
+        if (gameStarted) {
+            promptText.setText(R.string.too_much_prompt);
+            gameStarted = false;
+            this.getView().setBackgroundColor(Color.WHITE);
+        }
+        // start game game
+        else {
+            promptText.setText(R.string.go_prompt);
+            gameStarted = true;
+            this.getView().setBackgroundColor(Color.GREEN);
+        }
+
     }
 
     private void startGame() {
@@ -61,6 +68,13 @@ public class ReactionFragment extends Fragment {
 
     }
 
+    private class gametimeAsyncTask extends AsyncTask<Void, Integer, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            return null;
+        }
+    }
 
 
 }
