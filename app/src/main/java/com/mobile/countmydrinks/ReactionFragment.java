@@ -11,26 +11,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Random;
+
 public class ReactionFragment extends Fragment {
 
     private static int MILLISECS_IN_SECOND = 1000;
-    private static int MILLISECS_IN_DECISECS = 100;
-    private static int MILLISECS_IN_CENTISECS = 10;
-
-    private static int CENTISECONDS_IN_SECOND = 100;
-
+    private static long SEED = 29;
     private TextView timeCountText;
     private TextView promptText;
     private TextView baselineText;
 
-    private TouchListener mTouchListener;
     private boolean gameStarted;
-    private int milliseconds;
+    private boolean countdownActivated;
+
+    private TouchListener mTouchListener;
     private GametimeAsyncTask gametimeAsyncTask;
     private StringBuilder mStringBuilder;
+    private Random mRandom;
 
     private long startTime;
     private long timeElapsed;
+    private long waitTime;
 
 
     @Nullable
@@ -43,9 +44,12 @@ public class ReactionFragment extends Fragment {
         baselineText = (TextView) view.findViewById(R.id.baselineText);
 
         gameStarted = false;
+        countdownActivated = false;
+
         mTouchListener = new TouchListener(mainActivity);
         view.setOnTouchListener(mTouchListener);
         mStringBuilder = new StringBuilder();
+        mRandom = new Random(SEED);
         return view;
     }
 
@@ -53,7 +57,7 @@ public class ReactionFragment extends Fragment {
 
         // end game
         if (gameStarted) {
-            promptText.setText(R.string.too_much_prompt);
+            promptText.setText(R.string.play_again_prompt);
             gameStarted = false;
             this.getView().setBackgroundColor(Color.WHITE);
             gametimeAsyncTask.cancel(true);
@@ -62,10 +66,12 @@ public class ReactionFragment extends Fragment {
         else {
             startTime = 0;
             timeElapsed = 0;
+            waitTime = generateRandomWaitTime();
             timeCountText.setText("00:000");
-            promptText.setText(R.string.go_prompt);
+            promptText.setText(R.string.get_ready_prompt);
+
             gameStarted = true;
-            this.getView().setBackgroundColor(Color.GREEN);
+            countdownActivated = false;
             gametimeAsyncTask = new GametimeAsyncTask();
             gametimeAsyncTask.execute();
         }
@@ -91,20 +97,19 @@ public class ReactionFragment extends Fragment {
             mStringBuilder.append("0");
         }
 
-//        if (centisecs < 1) {
-//            mStringBuilder.append("0");
-//        }
         mStringBuilder.append(Long.toString(milliseconds));
         timeCountText.setText(mStringBuilder.toString());
         mStringBuilder.setLength(0);
     }
 
-    private void startGame() {
-
+    private void changeBackgroundGreen() {
+        this.getView().setBackgroundColor(Color.GREEN);
     }
 
-    private void endGame() {
-
+    private long generateRandomWaitTime() {
+        int minimumWaitTime = 2000; // 2 seconds
+        int maximumWaitTime = 5000; // 5 + 2 = 7 seconds
+        return (long) (mRandom.nextInt(maximumWaitTime) + minimumWaitTime) ;
     }
 
     @Override
@@ -118,16 +123,22 @@ public class ReactionFragment extends Fragment {
 
     private class GametimeAsyncTask extends AsyncTask<Void, Void, Void> {
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            startTime = System.currentTimeMillis();
-        }
+
 
         @Override
         protected Void doInBackground(Void... voids) {
 
             while (gameStarted) {
+
+                if (!countdownActivated) {
+                    try {
+                        Thread.sleep(waitTime);
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 try {
                     Thread.sleep(1);
                 }
@@ -146,6 +157,12 @@ public class ReactionFragment extends Fragment {
         @Override
         protected void onProgressUpdate(Void... voids) {
             super.onProgressUpdate();
+            if (!countdownActivated) {
+                startTime = System.currentTimeMillis();
+                promptText.setText(R.string.go_prompt);
+                changeBackgroundGreen();
+                countdownActivated = true;
+            }
             setTimeTextValues(System.currentTimeMillis());
         }
     }
