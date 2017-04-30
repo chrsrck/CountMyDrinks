@@ -17,8 +17,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.Locale;
@@ -51,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     Bundle homeBundle;
     boolean abovePositiveZone;
     boolean hasNotified;
+    boolean needsToNotify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +104,7 @@ public class MainActivity extends AppCompatActivity
         homeBundle = new Bundle();
         abovePositiveZone = false;
         hasNotified = false;
+        needsToNotify = false;
     }
 
     @Override
@@ -150,6 +150,11 @@ public class MainActivity extends AppCompatActivity
             ft.replace(R.id.content_frame, fragment, fragTag);
             ft.commit();
             currTag = fragTag;
+        }
+
+        if (needsToNotify) {
+            needsToNotify = false;
+            promptEndSession();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -243,7 +248,7 @@ public class MainActivity extends AppCompatActivity
         protected Void doInBackground(Double... integers) {
             while (running) {
                 try {
-                    Thread.sleep(360000); // sleep for 6 minutes 360000
+                    Thread.sleep(1000); // sleep for 6 minutes 360000
                 }
                 catch (Exception e) {
                     System.out.println(e);
@@ -278,7 +283,10 @@ public class MainActivity extends AppCompatActivity
                 homeFrag.setBacText(formatBac);
             }
             if (!running) {
-                promptEndSession();
+                needsToNotify = true;
+                if (!currTag.equals(REACTION_TAG)) {
+                    promptEndSession();
+                }
             }
         }
     }
