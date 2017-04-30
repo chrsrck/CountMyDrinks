@@ -31,4 +31,10 @@
     <string name="too_much_prompt">You might have had a little too much to drink.</string>
     <string name="play_again_prompt">Play again?</string>
     <string name="get_ready_prompt">Get ready...</string>
+
+
+    <string name="end_title">End Drinking Session?</string>
+    <string name="end_message">You\'re BAC level is at 0%. You no longer have alcohol in your system,
+        do you want to end your drinking session?</string>
+
 </resources>

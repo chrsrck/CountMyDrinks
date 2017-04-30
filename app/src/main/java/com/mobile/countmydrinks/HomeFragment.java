@@ -89,4 +89,8 @@ public class HomeFragment extends Fragment {
     public void setBacText(String txt) {
         bacText.setText(txt);
     }
+
+    public void setTotalText(int total) {
+        totalText.setText(total + " Total Drinks");
+    }
 }
