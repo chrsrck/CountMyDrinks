@@ -9,15 +9,11 @@
     <string name="alert_title">Setting Up Your Profile</string>
     <string name="alert_message">Default settings are used before you set up your customized profile.
         For more accurate BAC calculations, please update your profile.</string>
-    <string name="about_info">This app was created to help hokies to monitor thier drinking, by keeping
-        track of thier standard drinks.We use a BAC Calculator to estimate your BAC and a Reaction time
-        game to test your reaction time.
+    <string name="about_info">This app was created to help hokies monitor their drinking, by keeping
+        track of thier standard drinks. We use a BAC calculator to estimate your BAC and a reaction time
+        game to test your reaction time.\n
     </string>
-    <string name="BAC_info">
-        Party Positive Zone BAC  = .06 \n
-        Legal Driving Zone BAC U+003C = .08 \n
-        Danger Zone BAC U+003C = .10 \n
-    </string>
+
 
 
     <string-array name="gender_array">
@@ -46,10 +42,16 @@
 
 
     <string name="end_title">End Drinking Session?</string>
-    <string name="end_message">You\'re BAC level is at 0%. You no longer have alcohol in your system,
+    <string name="end_message" formatted="false">You\'re BAC level is at 0%. You no longer have alcohol in your system,
         do you want to end your drinking session?</string>
 
-    <string name="bac_level_info">Party Positive Zone BAC &lt;= .06\nLegal Driving Zone BAC
-        &lt;= .08\nDanger Zone BAC &lt;= .10</string>
+    <string name="bac_level_info" formatted="false">Positive Drinking Zone BAC &lt;= .06%\nLegal Driving Zone BAC
+        &lt;= .08%\nDanger Zone BAC &lt;= .10%\n
+   </string>
+    <string name="bac_calc_info" formatted="false">We calculate your BAC with the standard
+        drinks below: \nBeer: 12 oz - 4.5% ABV \nWine: 5 oz - 12.5% ABV \nShot: 1.5 oz - 40.0% ABV\n</string>
+
+    <string name="reaction_info">Research shows that there is a strong correlation between reaction time
+    and level of drunkenness. People have 25% slower reaction time when drunk than when sober.</string>
 
 </resources>
