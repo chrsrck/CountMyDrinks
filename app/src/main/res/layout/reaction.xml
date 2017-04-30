@@ -1,16 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
-    <LinearLayout
+    android:layout_width="match_parent"
+              android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    >
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="30sp"
-            android:text="Reaction Time"/>
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        android:text="Time"
+        android:id="@+id/labelText"/>
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/timeCountText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="36sp"
+        android:text="00:000"
+        android:gravity="center"
+        android:layout_below="@+id/labelText"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:id="@+id/promptText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tap screen to start reaction game."
+        android:gravity="center"
+        android:textSize="30sp"
+        android:layout_below="@+id/timeCountText"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/baselineText"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Baseline: "
+        android:textSize="20dp"
+        android:layout_weight="3"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/baselineText"/>
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/baselineLayout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:weightSum="4">-->
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:text="Baseline: "-->
+            <!--android:textSize="20dp"-->
+            <!--android:layout_weight="3"-->
+            <!--/>-->
+
+        <!--<CheckBox-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Set Baseline"/>-->
+
+    <!--</LinearLayout>-->
+
 </RelativeLayout>
