@@ -1,6 +1,8 @@
 package com.mobile.countmydrinks;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,18 +16,25 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
 import java.util.Locale;
 
+/**
+ * @author Chris
+ * @author Justin Park
+ */
 public class HomeFragment extends Fragment {
     TextView bacText;
     TextView totalText;
+    ImageView addButton;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home, container, false);
+        final View view = inflater.inflate(R.layout.home, container, false);
         bacText = (TextView) view.findViewById(R.id.bac);
         totalText = (TextView) view.findViewById(R.id.total);
+        addButton = (ImageView) view.findViewById(R.id.addButton);
         final MainActivity mainActivity = (MainActivity) getActivity();
 
         Spinner typeSpinner = (Spinner) view.findViewById(R.id.typeSpinner);
@@ -35,10 +44,38 @@ public class HomeFragment extends Fragment {
         typeSpinner.setAdapter(typeAdapter);
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View spinView, int position, long id) {
                 SharedPreferences settings = getActivity().getSharedPreferences(MainActivity.PROFILE_SETTING,0);
                 String what = parent.getItemAtPosition(position).toString();
                 settings.edit().putString(MainActivity.DRINK_TYPE, what).apply();
+                final int picID;
+                if (what.equals("Beer")) {
+                    picID = R.drawable.glasspitcher;
+                }
+                else if (what.equals("Wine")) {
+                    picID = R.drawable.wine_glass;
+                }
+                else if (what.equals("Hard Liquor")) {
+                    picID = R.drawable.shot;
+                }
+                else {
+                    picID = 0;
+                }
+                if (picID != 0) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            InputStream is = getActivity().getResources().openRawResource(picID);
+                            final Bitmap imageBitmap = BitmapFactory.decodeStream(is);
+                            view.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    addButton.setImageBitmap(imageBitmap);
+                                }
+                            });
+                        }
+                    });
+                }
             }
 
             @Override
@@ -47,7 +84,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ImageView addButton = (ImageView) view.findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,4 +125,9 @@ public class HomeFragment extends Fragment {
     public void setBacText(String txt) {
         bacText.setText(txt);
     }
+
+    public void setTotalText(int total) {
+        totalText.setText(total + " Total Drinks");
+    }
+
 }

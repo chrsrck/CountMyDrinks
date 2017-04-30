@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -116,28 +117,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -190,10 +169,18 @@ public class MainActivity extends AppCompatActivity
         return bacCalc.getNumDrinks();
     }
 
+    public void onTouchFired() {
+        if (currTag.equals(REACTION_TAG)) {
+            ReactionFragment reactionFragment =
+                    (ReactionFragment) getSupportFragmentManager().findFragmentByTag(REACTION_TAG);
+            reactionFragment.onTouchFired();
+        }
+    }
+
     public void startBACCalc() {
         if (!running) {
             timeAsyncTask = new TimeAsyncTask();
-            timeAsyncTask.execute();
+            timeAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             running = true;
         }
     }
@@ -216,12 +203,38 @@ public class MainActivity extends AppCompatActivity
                         .setContentTitle("Count My Drinks")
                         .setContentText(contentText)
                         .setContentIntent(viewPendingIntent)
-                        .setVibrate(new long[] { 1000, 1000});;
+                        .setVibrate(new long[] {1000, 1000});;
 
         NotificationManagerCompat notificationManagerCompat =
                 NotificationManagerCompat.from(this);
 
         notificationManagerCompat.notify(notificationId, notificationBuilder.build());
+    }
+
+    public void promptEndSession() {
+        timeAsyncTask.cancel(true);
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setCancelable(false);
+        builder.setTitle(R.string.end_title);
+        builder.setMessage(R.string.end_message);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                bacCalc.resetNumDrinks();
+                if (currTag.equals(HOME_TAG)) {
+                    HomeFragment homeFrag = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HOME_TAG);
+                    homeFrag.setTotalText(bacCalc.getNumDrinks());
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
     }
 
     private class TimeAsyncTask extends AsyncTask<Double, Double, Void> {
@@ -230,7 +243,7 @@ public class MainActivity extends AppCompatActivity
         protected Void doInBackground(Double... integers) {
             while (running) {
                 try {
-                    Thread.sleep(360000); // sleep for 6 minutes
+                    Thread.sleep(360000); // sleep for 6 minutes 360000
                 }
                 catch (Exception e) {
                     System.out.println(e);
@@ -245,15 +258,15 @@ public class MainActivity extends AppCompatActivity
         protected void onProgressUpdate(Double... values) {
             super.onProgressUpdate(values);
             double val = values[0];
-            if (val < 0) {
+            if (val <= 0) {
                 val = 0;
                 running = false;
             }
-            if (val > 0.06 && !hasNotified) {
+            else if (val > 0.06 && !hasNotified) {
                 abovePositiveZone = true;
                 notifyUser(abovePositiveZone);
             }
-            if (val <= 0.06 && abovePositiveZone) {
+            else if (val <= 0.06 && abovePositiveZone) {
                 abovePositiveZone = false;
                 notifyUser(abovePositiveZone);
                 hasNotified = false;
@@ -263,6 +276,9 @@ public class MainActivity extends AppCompatActivity
             if (currTag.equals(HOME_TAG)) {
                 HomeFragment homeFrag = (HomeFragment) getSupportFragmentManager().findFragmentByTag(HOME_TAG);
                 homeFrag.setBacText(formatBac);
+            }
+            if (!running) {
+                promptEndSession();
             }
         }
     }
