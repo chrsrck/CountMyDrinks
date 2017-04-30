@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.Locale;
-
+// chris
 public class HomeFragment extends Fragment {
     TextView bacText;
     TextView totalText;
