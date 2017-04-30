@@ -169,6 +169,15 @@ public class MainActivity extends AppCompatActivity
         return bacCalc.getNumDrinks();
     }
 
+    public void onTouchFired() {
+        Log.d("asdf", "asdf");
+        if (currTag.equals(REACTION_TAG)) {
+            ReactionFragment reactionFragment =
+                    (ReactionFragment) getSupportFragmentManager().findFragmentByTag(REACTION_TAG);
+            reactionFragment.onTouchFired();
+        }
+    }
+
     public void startBACCalc() {
         if (!running) {
             timeAsyncTask = new TimeAsyncTask();
