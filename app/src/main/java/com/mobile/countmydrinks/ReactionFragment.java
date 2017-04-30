@@ -45,6 +45,7 @@ public class ReactionFragment extends Fragment {
         mTouchListener = new TouchListener(mainActivity);
         view.setOnTouchListener(mTouchListener);
         mRandom = new Random(SEED);
+        gametimeAsyncTask = new GametimeAsyncTask();
         return view;
     }
 
@@ -74,7 +75,7 @@ public class ReactionFragment extends Fragment {
             gameStarted = true;
             countdownActivated = false;
             gametimeAsyncTask = new GametimeAsyncTask();
-            gametimeAsyncTask.execute();
+            gametimeAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
 
