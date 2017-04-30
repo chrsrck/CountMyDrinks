@@ -48,5 +48,9 @@
     <string name="end_title">End Drinking Session?</string>
     <string name="end_message">You\'re BAC level is at 0%. You no longer have alcohol in your system,
         do you want to end your drinking session?</string>
+    <string name="trial_prompt_1">You have </string>
+    <string name="trial_prompt_2"> trials left.</string>
+    <string name="baseline_set">Your new baseline is </string>
+
 
 </resources>

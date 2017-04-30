@@ -1,5 +1,6 @@
 package com.mobile.countmydrinks;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,6 +35,8 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
 
     private long startTime;
     private long waitTime;
+    private int tries;
+    private long timeSum;
 
     @Nullable
     @Override
@@ -53,6 +56,12 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
 //            baselineCheck.callOnClick();
 //        }
 
+        SharedPreferences sharedPreferences = mainActivity.getSharedPreferences(MainActivity.BASELINE, 0);
+        long baseline = sharedPreferences.getLong(MainActivity.BASELINE, 0);
+        baselineText.setText("Baseline: " + Long.toString(baseline) + " ms");
+
+        tries = 3;
+        timeSum = 0;
 
         gameStarted = false;
         countdownActivated = false;
@@ -71,9 +80,9 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
             gameStarted = false;
             this.getView().setBackgroundColor(Color.WHITE);
             gametimeAsyncTask.cancel(true);
-            setTimeTextValues(System.currentTimeMillis());
+            long timeElapsed = setTimeTextValues(System.currentTimeMillis());
             countdownActivated = false;
-
+            handleBaseline(timeElapsed);
         }
         else if (gameStarted) { // tapped too soon
             gametimeAsyncTask.cancel(true);
@@ -95,15 +104,33 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
         }
     }
 
-    private void recordBaseline() {
-        if (mainActivity.getBac() > 0 && mainActivity.getBac() < 0.0001) {
-            recordBaseline();
+    private void handleBaseline(long trialTime) {
+        if (baselineCheck.isChecked() && tries > 0) {
+            timeSum += trialTime;
+            tries--;
+            promptText.setText("You have " + tries + " tries left");
+        }
+
+        if (tries == 0) {
+            // display average;
+            long baseline = timeSum / 3;
+            promptText.setText("Your baseline is " + baseline + " ms");
+            baselineText.setText("Baseline " +  Long.toString(baseline) + " ms");
+
+            SharedPreferences sharedPreferences =
+                    mainActivity.getSharedPreferences(MainActivity.BASELINE, 0);
+            sharedPreferences.edit().putLong(MainActivity.BASELINE, baseline).apply();
+
+            baselineCheck.setChecked(false);
+            tries = 3;
+            timeSum = 0;
         }
     }
 
-    private void setTimeTextValues(long threadTime) {
+    private long setTimeTextValues(long threadTime) {
         long timeElapsed = threadTime - startTime;
         timeCountText.setText("" + timeElapsed + " ms");
+        return timeElapsed;
     }
 
     private void changeBackgroundGreen() {
@@ -141,6 +168,11 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
                 baselineCheck.setChecked(false);
                 Toast.makeText(mainActivity,
                         "You can only set a baseline with 0 BAC", Toast.LENGTH_LONG).show();
+            }
+
+            if (baselineCheck.isChecked()) {
+                tries = 3;
+                timeSum = 0;
             }
         }
     }

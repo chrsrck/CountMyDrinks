@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/baselineText"
         android:textAlignment="center"
-        android:text="Baseline Reaction Time: Not Set"
+        android:text="Baseline Time: Not Set"
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@+id/weightTable"
         app:layout_constraintBottom_toTopOf="@+id/updateButton"
