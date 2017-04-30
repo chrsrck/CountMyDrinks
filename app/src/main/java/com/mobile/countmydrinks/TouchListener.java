@@ -12,11 +12,8 @@ import android.view.View;
  */
 
 public class TouchListener implements View.OnTouchListener {
-    private static final String TAG = "touclistner";
-
     MainActivity mainActivity;
     GestureDetectorCompat gestureDetectorCompat;
-    ReactionFragment mReactionFragment;
 
     public TouchListener(MainActivity mact) {
         mainActivity = mact;
@@ -25,13 +22,11 @@ public class TouchListener implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-//        Log.d("oontouch", "On touch detected touch listener");
         gestureDetectorCompat.onTouchEvent(motionEvent);
         return true;
     }
 
     private class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             mainActivity.onTouchFired();

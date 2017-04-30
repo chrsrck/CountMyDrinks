@@ -31,6 +31,7 @@
     <string name="too_much_prompt">You might have had a little too much to drink.</string>
     <string name="play_again_prompt">Play again?</string>
     <string name="get_ready_prompt">Get ready...</string>
+    <string name="too_soon_prompt">Too soon!\nTap to try again.</string>
 
 
     <string name="end_title">End Drinking Session?</string>

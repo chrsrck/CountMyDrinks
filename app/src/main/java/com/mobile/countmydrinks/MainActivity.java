@@ -170,7 +170,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void onTouchFired() {
-        Log.d("asdf", "asdf");
         if (currTag.equals(REACTION_TAG)) {
             ReactionFragment reactionFragment =
                     (ReactionFragment) getSupportFragmentManager().findFragmentByTag(REACTION_TAG);
@@ -280,7 +279,6 @@ public class MainActivity extends AppCompatActivity
             }
             if (!running) {
                 promptEndSession();
-                Log.d("HELLO", "HELLO");
             }
         }
     }
