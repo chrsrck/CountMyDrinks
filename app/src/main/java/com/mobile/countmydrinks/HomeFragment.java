@@ -42,6 +42,15 @@ public class HomeFragment extends Fragment {
                 String what = parent.getItemAtPosition(position).toString();
                 settings.edit().putString(MainActivity.DRINK_TYPE, what).apply();
 
+                if (what.equals("Beer")) {
+                    addButton.setImageResource(R.drawable.glasspitcher);
+                }
+                else if (what.equals("Wine")) {
+                    addButton.setImageResource(R.drawable.wine_glass);
+                }
+                else if (what.equals("Hard Liquor")) {
+                    addButton.setImageResource(R.drawable.shot);
+                }
 
             }
 
