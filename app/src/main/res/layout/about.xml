@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/about"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="16dp">
 
                 
     <LinearLayout
@@ -13,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="About Count My Drinks"
+            android:text="About"
             android:textAlignment="center"
             android:textSize="35sp"
             android:textStyle="bold"/>
@@ -33,7 +34,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/about_info"
                     android:textSize="25sp"
-
                     />
                 <TextView
                     android:layout_width="match_parent"
@@ -41,7 +41,12 @@
                     android:textSize="35sp"
                     android:text="BAC Information"
                     android:textStyle="bold"
-
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="23sp"
+                    android:text="@string/bac_level_info"
                     />
                 <TextView
                     android:layout_width="match_parent"

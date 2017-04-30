@@ -49,4 +49,7 @@
     <string name="end_message">You\'re BAC level is at 0%. You no longer have alcohol in your system,
         do you want to end your drinking session?</string>
 
+    <string name="bac_level_info">Party Positive Zone BAC &lt;= .06\nLegal Driving Zone BAC
+        &lt;= .08\nDanger Zone BAC &lt;= .10</string>
+
 </resources>
