@@ -19,6 +19,7 @@ import java.util.Locale;
 public class HomeFragment extends Fragment {
     TextView bacText;
     TextView totalText;
+    ImageView addButton;
 
     @Nullable
     @Override
@@ -26,6 +27,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.home, container, false);
         bacText = (TextView) view.findViewById(R.id.bac);
         totalText = (TextView) view.findViewById(R.id.total);
+        addButton = (ImageView) view.findViewById(R.id.addButton);
         final MainActivity mainActivity = (MainActivity) getActivity();
 
         Spinner typeSpinner = (Spinner) view.findViewById(R.id.typeSpinner);
@@ -39,6 +41,8 @@ public class HomeFragment extends Fragment {
                 SharedPreferences settings = getActivity().getSharedPreferences(MainActivity.PROFILE_SETTING,0);
                 String what = parent.getItemAtPosition(position).toString();
                 settings.edit().putString(MainActivity.DRINK_TYPE, what).apply();
+
+
             }
 
             @Override
@@ -47,7 +51,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        ImageView addButton = (ImageView) view.findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,5 +95,9 @@ public class HomeFragment extends Fragment {
 
     public void setTotalText(int total) {
         totalText.setText(total + " Total Drinks");
+    }
+
+    public void changeButtonPic() {
+
     }
 }
