@@ -283,9 +283,11 @@ public class MainActivity extends AppCompatActivity
                 homeFrag.setBacText(formatBac);
             }
             if (!running) {
-                needsToNotify = true;
                 if (!currTag.equals(REACTION_TAG)) {
                     promptEndSession();
+                }
+                else {
+                    needsToNotify = true;
                 }
             }
         }
