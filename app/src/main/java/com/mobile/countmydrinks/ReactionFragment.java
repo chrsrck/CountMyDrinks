@@ -10,15 +10,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 
-public class ReactionFragment extends Fragment {
+public class ReactionFragment extends Fragment implements CheckBox.OnClickListener {
+
+    MainActivity mainActivity;
     private static long SEED = 29;
     private TextView timeCountText;
     private TextView promptText;
     private TextView baselineText;
+    private CheckBox baselineCheck;
 
     private boolean gameStarted;
     private boolean countdownActivated;
@@ -34,10 +39,20 @@ public class ReactionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.reaction, container, false);
-        final MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity = (MainActivity) getActivity();
         timeCountText = (TextView) view.findViewById(R.id.timeCountText);
         promptText = (TextView) view.findViewById(R.id.promptText);
         baselineText = (TextView) view.findViewById(R.id.baselineText);
+        baselineCheck = (CheckBox) view.findViewById(R.id.baselineCheck);
+
+        baselineCheck.setOnClickListener(this);
+        baselineCheck.setChecked(false);
+
+        // TODO: enable or disable the checkbox here based on parameter and bac level
+//        if (launchedAbout) {
+//            baselineCheck.callOnClick();
+//        }
+
 
         gameStarted = false;
         countdownActivated = false;
@@ -58,6 +73,7 @@ public class ReactionFragment extends Fragment {
             gametimeAsyncTask.cancel(true);
             setTimeTextValues(System.currentTimeMillis());
             countdownActivated = false;
+
         }
         else if (gameStarted) { // tapped too soon
             gametimeAsyncTask.cancel(true);
@@ -76,6 +92,12 @@ public class ReactionFragment extends Fragment {
             countdownActivated = false;
             gametimeAsyncTask = new GametimeAsyncTask();
             gametimeAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
+    private void recordBaseline() {
+        if (mainActivity.getBac() > 0 && mainActivity.getBac() < 0.0001) {
+            recordBaseline();
         }
     }
 
@@ -109,6 +131,17 @@ public class ReactionFragment extends Fragment {
         super.onResume();
         if (!gameStarted) {
             promptText.setText(R.string.start_game_prompt);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == baselineCheck.getId()) {
+            if (mainActivity.getBac() > 0) {
+                baselineCheck.setChecked(false);
+                Toast.makeText(mainActivity,
+                        "You can only set a baseline with 0 BAC", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
