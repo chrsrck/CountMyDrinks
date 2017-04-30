@@ -9,6 +9,16 @@
     <string name="alert_title">Setting Up Your Profile</string>
     <string name="alert_message">Default settings are used before you set up your customized profile.
         For more accurate BAC calculations, please update your profile.</string>
+    <string name="about_info">This app was created to help hokies to monitor thier drinking, by keeping
+        track of thier standard drinks.We use a BAC Calculator to estimate your BAC and a Reaction time
+        game to test your reaction time.
+    </string>
+    <string name="BAC_info">
+        Party Positive Zone BAC  = .06 \n
+        Legal Driving Zone BAC U+003C = .08 \n
+        Danger Zone BAC U+003C = .10 \n
+    </string>
+
 
     <string-array name="gender_array">
         <item>Gender</item>
