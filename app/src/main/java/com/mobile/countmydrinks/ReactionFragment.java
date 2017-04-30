@@ -1,5 +1,6 @@
 package com.mobile.countmydrinks;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,15 +11,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Random;
 
-public class ReactionFragment extends Fragment {
+public class ReactionFragment extends Fragment implements CheckBox.OnClickListener {
+
+    MainActivity mainActivity;
     private static long SEED = 29;
     private TextView timeCountText;
     private TextView promptText;
     private TextView baselineText;
+    private CheckBox baselineCheck;
 
     private boolean gameStarted;
     private boolean countdownActivated;
@@ -29,15 +35,33 @@ public class ReactionFragment extends Fragment {
 
     private long startTime;
     private long waitTime;
+    private int tries;
+    private long timeSum;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.reaction, container, false);
-        final MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity = (MainActivity) getActivity();
         timeCountText = (TextView) view.findViewById(R.id.timeCountText);
         promptText = (TextView) view.findViewById(R.id.promptText);
         baselineText = (TextView) view.findViewById(R.id.baselineText);
+        baselineCheck = (CheckBox) view.findViewById(R.id.baselineCheck);
+
+        baselineCheck.setOnClickListener(this);
+        baselineCheck.setChecked(false);
+
+        // TODO: enable or disable the checkbox here based on parameter and bac level
+//        if (launchedAbout) {
+//            baselineCheck.callOnClick();
+//        }
+
+        SharedPreferences sharedPreferences = mainActivity.getSharedPreferences(MainActivity.BASELINE, 0);
+        long baseline = sharedPreferences.getLong(MainActivity.BASELINE, 0);
+        baselineText.setText("Baseline: " + Long.toString(baseline) + " ms");
+
+        tries = 3;
+        timeSum = 0;
 
         gameStarted = false;
         countdownActivated = false;
@@ -56,8 +80,9 @@ public class ReactionFragment extends Fragment {
             gameStarted = false;
             this.getView().setBackgroundColor(Color.WHITE);
             gametimeAsyncTask.cancel(true);
-            setTimeTextValues(System.currentTimeMillis());
+            long timeElapsed = setTimeTextValues(System.currentTimeMillis());
             countdownActivated = false;
+            handleBaseline(timeElapsed);
         }
         else if (gameStarted) { // tapped too soon
             gametimeAsyncTask.cancel(true);
@@ -79,9 +104,33 @@ public class ReactionFragment extends Fragment {
         }
     }
 
-    private void setTimeTextValues(long threadTime) {
+    private void handleBaseline(long trialTime) {
+        if (baselineCheck.isChecked() && tries > 0) {
+            timeSum += trialTime;
+            tries--;
+            promptText.setText("You have " + tries + " tries left");
+        }
+
+        if (tries == 0) {
+            // display average;
+            long baseline = timeSum / 3;
+            promptText.setText("Your baseline is " + baseline + " ms");
+            baselineText.setText("Baseline " +  Long.toString(baseline) + " ms");
+
+            SharedPreferences sharedPreferences =
+                    mainActivity.getSharedPreferences(MainActivity.BASELINE, 0);
+            sharedPreferences.edit().putLong(MainActivity.BASELINE, baseline).apply();
+
+            baselineCheck.setChecked(false);
+            tries = 3;
+            timeSum = 0;
+        }
+    }
+
+    private long setTimeTextValues(long threadTime) {
         long timeElapsed = threadTime - startTime;
         timeCountText.setText("" + timeElapsed + " ms");
+        return timeElapsed;
     }
 
     private void changeBackgroundGreen() {
@@ -109,6 +158,22 @@ public class ReactionFragment extends Fragment {
         super.onResume();
         if (!gameStarted) {
             promptText.setText(R.string.start_game_prompt);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == baselineCheck.getId()) {
+            if (mainActivity.getBac() > 0) {
+                baselineCheck.setChecked(false);
+                Toast.makeText(mainActivity,
+                        "You can only set a baseline with 0 BAC", Toast.LENGTH_LONG).show();
+            }
+
+            if (baselineCheck.isChecked()) {
+                tries = 3;
+                timeSum = 0;
+            }
         }
     }
 

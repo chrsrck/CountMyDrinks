@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity
     public final static String GENDER_SETTING = "gender settings";
     public final static String WEIGHT_SETTING = "weight settings";
     public final static String DRINK_TYPE = "drink type";
+    public final static String BASELINE = "baseline_value";
 
     /* STRING KEYS FOR FRAGMENT TAGS */
     public final static String HOME_TAG = "home tag";
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity
 
     /* KEEPS TRACK OF CURRENT FRAGMENT TAG */
     String currTag;
+
+
 
     TimeAsyncTask timeAsyncTask;
     BACCalc bacCalc;

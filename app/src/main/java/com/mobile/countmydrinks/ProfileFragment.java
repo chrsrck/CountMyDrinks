@@ -99,6 +99,17 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        TextView baselineText = (TextView) view.findViewById(R.id.baselineText);
+        SharedPreferences baselinePreference = getActivity().getSharedPreferences(MainActivity.BASELINE, 0);
+        long baseline = baselinePreference.getLong(MainActivity.BASELINE, 0);
+
+        if (baseline == 0) {
+            baselineText.setText("Baseline Time: Not Set");
+        }
+        else {
+            baselineText.setText("Baseline Time: " + baseline + " ms");
+        }
+
         /* Checking if the user has updated the profile and sets up their info */
         SharedPreferences settings = getActivity().getSharedPreferences(MainActivity.PROFILE_SETTING, 0);
         String currGender = settings.getString(MainActivity.GENDER_SETTING, "Gender");
