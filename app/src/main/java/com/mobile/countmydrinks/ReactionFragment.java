@@ -98,7 +98,17 @@ public class ReactionFragment extends Fragment {
     public void onPause() {
         super.onPause();
         if (!gametimeAsyncTask.isCancelled()) {
+            gameStarted = false;
+            countdownActivated = false;
             gametimeAsyncTask.cancel(true);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!gameStarted) {
+            promptText.setText(R.string.start_game_prompt);
         }
     }
 
