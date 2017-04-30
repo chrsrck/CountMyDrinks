@@ -25,8 +25,17 @@
     <string name="added_beer">You\'ve added a can of beer</string>
     <string name="added_wine">You\'ve added a glass of wine</string>
     <string name="added_shot">You\'ve added a shot of hard liquor</string>
+    
+    <string name="tap_prompt">Tap screen on color change.</string>
+    <string name="go_prompt">Go!</string>
+    <string name="too_much_prompt">You might have had a little too much to drink.</string>
+    <string name="play_again_prompt">Play again?</string>
+    <string name="get_ready_prompt">Get ready...</string>
+    <string name="too_soon_prompt">Too soon!\nTap to try again.</string>
+
 
     <string name="end_title">End Drinking Session?</string>
     <string name="end_message">You\'re BAC level is at 0%. You no longer have alcohol in your system,
         do you want to end your drinking session?</string>
+
 </resources>
