@@ -49,7 +49,7 @@
     <string name="baseline_set">Your new baseline is </string>
 
 
-    <string name="bac_level_info" formatted="false">Positive Drinking Zone BAC &lt;= .06%\nLegal Driving Zone BAC
+    <string name="bac_level_info" formatted="false">Party Positive Zone BAC &lt;= .06%\nLegal Driving Zone BAC
         &lt;= .08%\nDanger Zone BAC &lt;= .10%\n
    </string>
     <string name="bac_calc_info" formatted="false">We calculate your BAC with the standard

@@ -46,12 +46,12 @@ public class BACCalc {
         if(type.equals("Beer"))
         {
             ounces = 12;
-            alcoholContent = .045;
+            alcoholContent = .05;
         }
         else if(type.equals("Wine"))
         {
             ounces = 5;
-            alcoholContent = .125;
+            alcoholContent = .12;
         }
         else if(type.equals("Hard Liquor"))
         {
