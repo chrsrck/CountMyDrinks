@@ -209,11 +209,11 @@ public class MainActivity extends AppCompatActivity
     public void notifyUser(boolean above) {
         String contentText;
         if (above) {
-            contentText = "You're no longer in the positive drinking zone!";
+            contentText = "You're no longer in the party positive zone!";
             hasNotified = true;
         }
         else {
-            contentText = "You're back in the positive drinking zone";
+            contentText = "You're back in the party positive zone";
         }
         int notificationId = 1;
         Intent viewIntent = new Intent(this, MainActivity.class);
