@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            moveTaskToBack(true);
         }
     }
 
@@ -171,6 +171,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addDrink(String drinkType) {
+        if (getNumDrinks() == 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setCancelable(false);
+            builder.setTitle(R.string.warning_title);
+            builder.setMessage(R.string.warning_message);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        }
         bacCalc.addDrink(drinkType);
     }
 
@@ -201,18 +214,18 @@ public class MainActivity extends AppCompatActivity
     public void notifyUser(boolean above) {
         String contentText;
         if (above) {
-            contentText = "You're no longer in the positive drinking zone!";
+            contentText = "You're no longer in the party positive zone!";
             hasNotified = true;
         }
         else {
-            contentText = "You're back in the positive drinking zone";
+            contentText = "You're back in the party positive zone";
         }
         int notificationId = 1;
         Intent viewIntent = new Intent(this, MainActivity.class);
         PendingIntent viewPendingIntent = PendingIntent.getActivity(this, 0, viewIntent, 0);
         NotificationCompat.Builder notificationBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.mipmap.icon_pitcher)
                         .setContentTitle("Count My Drinks")
                         .setContentText(contentText)
                         .setContentIntent(viewPendingIntent)

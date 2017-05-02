@@ -52,7 +52,7 @@
     <string name="baseline_set">Your new baseline is </string>
 
 
-    <string name="bac_level_info" formatted="false">Positive Drinking Zone BAC &lt;= .06%\nLegal Driving Zone BAC
+    <string name="bac_level_info" formatted="false">Party Positive Zone BAC &lt;= .06%\nLegal Driving Zone BAC
         &lt;= .08%\nDanger Zone BAC &lt;= .10%\n
    </string>
     <string name="bac_calc_info" formatted="false">We calculate your BAC with the standard
@@ -61,4 +61,7 @@
     <string name="reaction_info">Research shows that there is a strong correlation between reaction time
     and level of drunkenness. People have 25% slower reaction time when drunk than when sober.</string>
 
+    <string name="warning_title">Don\'t Drink and Drive!</string>
+    <string name="warning_message">Do not drink and drive! Every 30 minutes, someone is killed
+        in an alocohol-related crash.</string>
 </resources>

@@ -12,7 +12,7 @@
         android:textAlignment="center"
         android:textSize="30sp"
         android:id="@+id/drinkingZone"
-        android:text="Positive Drinking Zone"
+        android:text="Party Positive Zone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
