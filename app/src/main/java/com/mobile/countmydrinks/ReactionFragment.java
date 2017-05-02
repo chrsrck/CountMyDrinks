@@ -95,7 +95,7 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
             this.getView().setBackgroundColor(Color.WHITE);
             startTime = 0;
             waitTime = generateRandomWaitTime();
-            timeCountText.setText("0 ms");
+            timeCountText.setText("");
             promptText.setText(R.string.get_ready_prompt);
             gameStarted = true;
             countdownActivated = false;
@@ -198,6 +198,7 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
             startTime = System.currentTimeMillis();
             promptText.setText(R.string.go_prompt);
             changeBackgroundGreen();
+            timeCountText.setText("");
             countdownActivated = true;
         }
     }
