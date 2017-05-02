@@ -116,7 +116,7 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
         if (baselineCheck.isChecked() && tries > 0) {
             timeSum += trialTime;
             tries--;
-            promptText.setText("You have " + tries + " tries left");
+            promptText.setText("You have " + tries + " trials left");
         }
 
         if (tries == 0) {
@@ -141,11 +141,18 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
         int percentChange = (int) ((Math.abs((double)timeElapsedTrial - (double) baseline) / baseline) * 100);
         promptBuilder.append(Integer.toString(percentChange) + "%");
 
-        if (timeElapsedTrial >= (baseline * 1.25) && bac > 0.06) {
-            promptBuilder.append(" slower than your baseline. You are a little tipsy.");
+        if (timeElapsedTrial >= (baseline * 1.25) && bac > 0) {
+            promptBuilder.append(" slower than your baseline. Your BAC is affecting your reaction time.");
         }
-        else if (timeElapsedTrial >= (baseline * 1.5) && bac > 0.08) {
-            promptBuilder.append(" slower than your baseline. You should slow down.");
+        else if (timeElapsedTrial >= (baseline * 1.5) && bac > 0) {
+            promptBuilder.append(" slower than your baseline. Your BAC is heavily affecting to the point where you" +
+                    " should slow down.");
+        }
+        else if (timeElapsedTrial >= baseline && bac > 0) {
+            promptBuilder.append(" slower than your baseline.");
+        }
+        else if (timeElapsedTrial < baseline && bac > 0) {
+            promptBuilder.append(" faster than your baseline.");
         }
         else if (timeElapsedTrial >= baseline && bac == 0) {
             promptBuilder.append(" slower than your baseline. Tap faster slowpoke.");
