@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity
     public final static String PROFILE_TAG = "profile tag";
     public final static String REACTION_TAG = "reaction tag";
     public final static String ABOUT_TAG = "about tag";
+    public final static String RESOURCE_TAG = "resource tag";
 
     /* STRING KEYS FOR HOME FRAGMENT */
     public static final String CURRENT_BAC = "current bac";
@@ -146,6 +147,10 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_about) {
             fragment = new AboutFragment();
             fragTag = ABOUT_TAG;
+        }
+        else if(id == R.id.resources) {
+            fragment = new ResourceFragment();
+            fragTag = RESOURCE_TAG;
         }
 
         if (!fragTag.equals(currTag) && fragment != null) {
