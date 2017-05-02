@@ -42,10 +42,52 @@ public class HomeFragment extends Fragment {
                 R.array.drink_type_array, R.layout.basic_spinner_item);
         typeAdapter.setDropDownViewResource(R.layout.basic_spinner_item);
         typeSpinner.setAdapter(typeAdapter);
+
+        if(getArguments() != null) {
+            double bac = getArguments().getDouble(MainActivity.CURRENT_BAC);
+            String formatBac = String.format(Locale.US, "%.3f", bac);
+            formatBac += "%";
+            bacText.setText(formatBac);
+
+            int numDrinks = getArguments().getInt(MainActivity.TOTAL_DRINKS);
+            totalText.setText(numDrinks + " Total Drinks");
+
+            String currDrink = getArguments().getString(MainActivity.CURRENT_DRINK);
+            final int picID;
+            if (currDrink.equals("Beer")) {
+                picID = R.drawable.glasspitcher;
+                typeSpinner.setSelection(0);
+            }
+            else if (currDrink.equals("Wine")) {
+                picID = R.drawable.wine_glass;
+                typeSpinner.setSelection(1);
+            }
+            else {
+                picID = R.drawable.shot;
+                typeSpinner.setSelection(2);
+            }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    InputStream is = getActivity().getResources().openRawResource(picID);
+                    final Bitmap imageBitmap = BitmapFactory.decodeStream(is);
+                    view.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            addButton.setImageBitmap(imageBitmap);
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            addButton.setImageResource(R.drawable.glasspitcher);
+        }
+
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View spinView, int position, long id) {
-                SharedPreferences settings = getActivity().getSharedPreferences(MainActivity.PROFILE_SETTING,0);
+                SharedPreferences settings = getActivity().getSharedPreferences(MainActivity.PROFILE_SETTING, 0);
                 String what = parent.getItemAtPosition(position).toString();
                 settings.edit().putString(MainActivity.DRINK_TYPE, what).apply();
                 final int picID;
@@ -108,16 +150,6 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext(), addMsg, Toast.LENGTH_LONG).show();
             }
         });
-
-        if(getArguments() != null) {
-            double bac = getArguments().getDouble(MainActivity.CURRENT_BAC);
-            String formatBac = String.format(Locale.US, "%.3f", bac);
-            formatBac += "%";
-            bacText.setText(formatBac);
-
-            int numDrinks = getArguments().getInt(MainActivity.TOTAL_DRINKS);
-            totalText.setText(numDrinks + " Total Drinks");
-        }
 
         return view;
     }
