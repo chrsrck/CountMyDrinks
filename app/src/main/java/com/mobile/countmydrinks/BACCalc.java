@@ -89,4 +89,26 @@ public class BACCalc {
     public void resetNumDrinks() {
         numDrinks = 0;
     }
+
+    public void setWeight(int weight) {
+        if (weight < 0) {
+            weight = DEFAULT_WEIGHT;
+        }
+        this.weight = ((double) weight) / 2.2046;
+    }
+
+    public void setGenderCoeff(String gender) {
+        if(gender.equals("Male"))
+        {
+            genderCoeff = .58;
+        }
+        else if(gender.equals("Female"))
+        {
+            genderCoeff = .49;
+        }
+        else
+        {
+            genderCoeff = .535;
+        }
+    }
 }
