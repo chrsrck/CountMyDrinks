@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity
         PendingIntent viewPendingIntent = PendingIntent.getActivity(this, 0, viewIntent, 0);
         NotificationCompat.Builder notificationBuilder =
                 (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setSmallIcon(R.mipmap.icon_pitcher)
                         .setContentTitle("Count My Drinks")
                         .setContentText(contentText)
                         .setContentIntent(viewPendingIntent)
