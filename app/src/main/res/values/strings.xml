@@ -58,4 +58,7 @@
     <string name="reaction_info">Research shows that there is a strong correlation between reaction time
     and level of drunkenness. People have 25% slower reaction time when drunk than when sober.</string>
 
+    <string name="warning_title">Don\'t Drink and Drive!</string>
+    <string name="warning_message">Do not drink and drive! Every 30 minutes, someone is killed
+        in an alocohol-related crash.</string>
 </resources>
