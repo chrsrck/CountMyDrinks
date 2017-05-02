@@ -166,6 +166,19 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void addDrink(String drinkType) {
+        if (getNumDrinks() == 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setCancelable(false);
+            builder.setTitle(R.string.warning_title);
+            builder.setMessage(R.string.warning_message);
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        }
         bacCalc.addDrink(drinkType);
     }
 
