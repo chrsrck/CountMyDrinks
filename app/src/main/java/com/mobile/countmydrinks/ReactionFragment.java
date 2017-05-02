@@ -37,6 +37,7 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
     private long waitTime;
     private int tries;
     private long timeSum;
+    private long baseline;
 
     @Nullable
     @Override
@@ -57,7 +58,7 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
 //        }
 
         SharedPreferences sharedPreferences = mainActivity.getSharedPreferences(MainActivity.BASELINE, 0);
-        long baseline = sharedPreferences.getLong(MainActivity.BASELINE, 0);
+        baseline = sharedPreferences.getLong(MainActivity.BASELINE, 0);
         baselineText.setText("Baseline: " + Long.toString(baseline) + " ms");
 
         tries = 3;
@@ -82,7 +83,14 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
             gametimeAsyncTask.cancel(true);
             long timeElapsed = setTimeTextValues(System.currentTimeMillis());
             countdownActivated = false;
-            handleBaseline(timeElapsed);
+
+            if (baselineCheck.isChecked()) {
+                handleBaseline(timeElapsed);
+            }
+            else {
+                setNormalEndPrompt(timeElapsed);
+            }
+
         }
         else if (gameStarted) { // tapped too soon
             gametimeAsyncTask.cancel(true);
@@ -95,7 +103,7 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
             this.getView().setBackgroundColor(Color.WHITE);
             startTime = 0;
             waitTime = generateRandomWaitTime();
-            timeCountText.setText("0 ms");
+            timeCountText.setText("");
             promptText.setText(R.string.get_ready_prompt);
             gameStarted = true;
             countdownActivated = false;
@@ -113,7 +121,7 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
 
         if (tries == 0) {
             // display average;
-            long baseline = timeSum / 3;
+            baseline = timeSum / 3;
             promptText.setText("Your baseline is " + baseline + " ms");
             baselineText.setText("Baseline " +  Long.toString(baseline) + " ms");
 
@@ -125,6 +133,28 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
             tries = 3;
             timeSum = 0;
         }
+    }
+
+    private void setNormalEndPrompt(long timeElapsedTrial) {
+        StringBuilder promptBuilder = new StringBuilder("Your reaction time is ");
+        double bac = mainActivity.getBac();
+        int percentChange = (int) ((Math.abs((double)timeElapsedTrial - (double) baseline) / baseline) * 100);
+        promptBuilder.append(Integer.toString(percentChange) + "%");
+
+        if (timeElapsedTrial >= (baseline * 1.25) && bac > 0.06) {
+            promptBuilder.append(" slower than your baseline. You are a little tipsy.");
+        }
+        else if (timeElapsedTrial >= (baseline * 1.5) && bac > 0.08) {
+            promptBuilder.append(" slower than your baseline. You should slow down.");
+        }
+        else if (timeElapsedTrial >= baseline && bac == 0) {
+            promptBuilder.append(" slower than your baseline. Tap faster slowpoke.");
+        }
+        else if (timeElapsedTrial < baseline && bac == 0) {
+            promptBuilder.append(" faster than your baseline. Way to beat it!");
+        }
+        promptBuilder.append(" Play again?");
+        promptText.setText(promptBuilder.toString());
     }
 
     private long setTimeTextValues(long threadTime) {
@@ -198,6 +228,7 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
             startTime = System.currentTimeMillis();
             promptText.setText(R.string.go_prompt);
             changeBackgroundGreen();
+            timeCountText.setText("");
             countdownActivated = true;
         }
     }
