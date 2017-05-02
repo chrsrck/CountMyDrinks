@@ -14,7 +14,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -38,10 +37,9 @@
                 android:id="@+id/sitelink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autoLink="web"
+                android:text="@string/help_site"
                 android:textColor="#FF1493"
-                android:textSize="25sp"
-                />
+                android:textSize="25sp" />
 
             <TextView
                 android:id="@+id/phone"
@@ -50,7 +48,6 @@
                 android:autoLink="phone"
                 android:text="@string/phone_info"
                 android:textSize="20dp" />
-
 
         </LinearLayout>
     </ScrollView>
