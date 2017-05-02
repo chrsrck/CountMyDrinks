@@ -136,12 +136,18 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
     }
 
     private void setNormalEndPrompt(long timeElapsedTrial) {
-        StringBuilder promptBuilder = new StringBuilder("Your reaction time is ");
+        StringBuilder promptBuilder = new StringBuilder();
         double bac = mainActivity.getBac();
         int percentChange = (int) ((Math.abs((double)timeElapsedTrial - (double) baseline) / baseline) * 100);
-        promptBuilder.append(Integer.toString(percentChange) + "%");
 
-        if (timeElapsedTrial >= (baseline * 1.25) && bac > 0) {
+        if (baseline != 0) {
+            promptBuilder.append("Your reaction time is " + Integer.toString(percentChange) + "%");
+        }
+
+        if (baseline == 0) {
+            promptBuilder.append("You have not set a baseline yet to compare to.");
+        }
+        else if (timeElapsedTrial >= (baseline * 1.25) && bac > 0) {
             promptBuilder.append(" slower than your baseline. Your BAC is affecting your reaction time.");
         }
         else if (timeElapsedTrial >= (baseline * 1.5) && bac > 0) {
