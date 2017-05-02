@@ -1,6 +1,7 @@
 package com.mobile.countmydrinks;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 
 import java.util.Locale;
 
@@ -154,6 +156,11 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (!fragTag.equals(currTag) && fragment != null) {
+            if (currTag.equals(PROFILE_TAG)) {
+                // Hide the keyboard on fragment change
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.content_frame, fragment, fragTag);
             ft.commit();
@@ -261,6 +268,11 @@ public class MainActivity extends AppCompatActivity
             }
         });
         builder.show();
+    }
+
+    public void updateBACSettings(String currGender, int weight) {
+        bacCalc.setGenderCoeff(currGender);
+        bacCalc.setWeight(weight);
     }
 
     private class TimeAsyncTask extends AsyncTask<Double, Double, Void> {

@@ -29,7 +29,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile, container, false);
-
+        final MainActivity mainActivity = (MainActivity) getActivity();
         /* Initializing the spinner */
         Spinner spinner = (Spinner) view.findViewById(R.id.gender_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
@@ -81,12 +81,14 @@ public class ProfileFragment extends Fragment {
                 SharedPreferences settings = getActivity().getSharedPreferences(MainActivity.PROFILE_SETTING, 0);
                 String currGender = settings.getString(MainActivity.GENDER_SETTING, "Gender");
                 String weightText = weightEdit.getText().toString();
+                int weight;
                 if (!weightText.isEmpty()) {
-                    int weight = Integer.parseInt(weightText);
+                    weight = Integer.parseInt(weightText);
                     settings.edit().putInt(MainActivity.WEIGHT_SETTING, weight).apply();
                 }
                 else {
                     settings.edit().putInt(MainActivity.WEIGHT_SETTING, -1).apply();
+                    weight = -1;
                 }
 
                 /* If the user has both updated their gender and weight then the data is saved */
@@ -96,6 +98,7 @@ public class ProfileFragment extends Fragment {
                 else {
                     settings.edit().putBoolean("has_profile", false).apply();
                 }
+                mainActivity.updateBACSettings(currGender, weight);
             }
         });
 

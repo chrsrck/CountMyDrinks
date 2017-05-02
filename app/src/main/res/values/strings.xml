@@ -39,10 +39,15 @@
     <string name="play_again_prompt">Play again?</string>
     <string name="get_ready_prompt">Get ready...</string>
     <string name="too_soon_prompt">Too soon!\nTap to try again.</string>
-    <string name="good_samaritan"> Good Samaritan Law: This law provides legal protection for an individual who may be under the influence, so that they will call 911 to seek help for a friend who has overdosed \n   </string>
-    <string name="help_site"> <a href= "http://hokiewellness.vt.edu/students/programs/Alcohol_and_Other_Drug_Education/Party_Positive.html"> Hokie Wellness Site </a></string>
-    <string name ="help_facts"> If you see these signs of alocohol poisoning please call for help: \nRespiration: is less than 8 breaths per minute \nIrregular Breathing \nNo Pain Response \nUnconsciouness \nVomiting \n</string>
-    <string name="phone_info"> \n\nSafe Ride: 540-231-7233\n\nPoison Control: 800-222-1222</string>
+    <string name="good_samaritan"> Good Samaritan Law: This law provides legal protection for an
+        individual who may be under the influence, so that they will call 911 to seek help for a
+        friend who has overdosed.\n</string>
+    <string name="help_site">
+        <a href= "http://hokiewellness.vt.edu/students/programs/Alcohol_and_Other_Drug_Education/Party_Positive.html">
+            Hokie Wellness Site </a></string>
+    <string name ="help_facts">If you see these signs of alocohol poisoning please call for help:
+        \nRespiration: is less than 8 breaths per minute\nIrregular Breathing\nNo Pain Response\nUnconsciouness\nVomiting\n</string>
+    <string name="phone_info">\n\nSafe Ride: 540-231-7233\n\nPoison Control: 800-222-1222</string>
 
     <string name="end_title">End Drinking Session?</string>
     <string name="end_message" formatted="false">You\'re BAC level is at 0%. You no longer have alcohol in your system,
