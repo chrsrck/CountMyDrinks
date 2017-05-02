@@ -39,7 +39,6 @@
     <ImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:src="@drawable/glasspitcher"
         android:layout_marginTop="20dp"
         android:id="@+id/addButton"
         app:layout_constraintTop_toBottomOf="@+id/bac"

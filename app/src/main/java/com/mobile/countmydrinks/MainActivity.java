@@ -43,11 +43,10 @@ public class MainActivity extends AppCompatActivity
     /* STRING KEYS FOR HOME FRAGMENT */
     public static final String CURRENT_BAC = "current bac";
     public static final String TOTAL_DRINKS = "total drinks";
+    public static final String CURRENT_DRINK = "current drink";
 
     /* KEEPS TRACK OF CURRENT FRAGMENT TAG */
     String currTag;
-
-
 
     TimeAsyncTask timeAsyncTask;
     BACCalc bacCalc;
@@ -133,8 +132,11 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.home_page) {
             fragment = new HomeFragment();
+            SharedPreferences settings = getSharedPreferences(MainActivity.PROFILE_SETTING, 0);
+            String currDrink = settings.getString(DRINK_TYPE, "Beer");
             homeBundle.putDouble(CURRENT_BAC, this.getBac());
             homeBundle.putInt(TOTAL_DRINKS, this.getNumDrinks());
+            homeBundle.putString(CURRENT_DRINK, currDrink);
             fragment.setArguments(homeBundle);
             fragTag = HOME_TAG;
         }
