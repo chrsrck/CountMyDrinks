@@ -18,6 +18,11 @@
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_about"
             android:title="About"/>
+        <item
+            android:id="@+id/resources"
+            android:icon="@drawable/ic_help_black_24dp"
+            android:title="Resources"
+            />
     </group>
 
 </menu>
