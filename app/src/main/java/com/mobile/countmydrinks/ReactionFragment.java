@@ -145,7 +145,7 @@ public class ReactionFragment extends Fragment implements CheckBox.OnClickListen
         }
 
         if (baseline == 0) {
-            promptBuilder.append("You have not set a baseline yet to compare to.");
+            promptBuilder.append("Baseline not set yet.\n");
         }
         else if (timeElapsedTrial >= (baseline * 1.25) && bac > 0) {
             promptBuilder.append(" slower than your baseline. Your BAC is affecting your reaction time.");
