@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity
                         .setContentTitle("Count My Drinks")
                         .setContentText(contentText)
                         .setContentIntent(viewPendingIntent)
-                        .setVibrate(new long[] {1000, 1000});;
+                        .setVibrate(new long[] {1000, 1000});
 
         NotificationManagerCompat notificationManagerCompat =
                 NotificationManagerCompat.from(this);
@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity
         protected Void doInBackground(Double... integers) {
             while (running) {
                 try {
-                    Thread.sleep(1000); // sleep for 6 minutes 360000
+                    Thread.sleep(5000); // sleep for 6 minutes 360000
                 }
                 catch (Exception e) {
                     System.out.println(e);
