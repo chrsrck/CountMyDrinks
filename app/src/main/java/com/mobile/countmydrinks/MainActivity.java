@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity
         protected Void doInBackground(Double... integers) {
             while (running) {
                 try {
-                    Thread.sleep(5000); // sleep for 6 minutes 360000
+                    Thread.sleep(360000); // sleep for 6 minutes 360000
                 }
                 catch (Exception e) {
                     System.out.println(e);
